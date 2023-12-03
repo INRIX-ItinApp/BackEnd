@@ -133,7 +133,7 @@ def ask_openai():
         print("layer3")
         # Use regular expressions to find the JSON array within the message content
         # We're looking for the pattern that starts with '[' and ends with ']', inclusive
-        print("preprocessing", json_array_str)
+        print("preprocessing", message_content)
         json_array_str = re.search(r"\[\s*\[.*?\]\s*\]", message_content, re.DOTALL)
         print("post-processing", json_array_str)
         print("layer4")
