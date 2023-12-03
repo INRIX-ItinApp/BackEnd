@@ -1,8 +1,10 @@
 import requests
+import os
+from dotenv import load_dotenv
 
-HASH_TOKEN = 'PASTE YOUR HASH TOKEN HERE'
-APP_ID = 'PASTE YOUR APP ID HERE'
-TOKEN_URL = 'https://api.iq.inrix.com/auth/v1/appToken'
+HASH_TOKEN = os.getenv('HASH_TOKEN')
+APP_ID = os.getenv('APP_ID')
+TOKEN_URL = os.getenv('TOKEN_URL')
 
 def get_token():
     #Pass in the app_id and hash_token as query parameters

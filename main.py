@@ -1,6 +1,11 @@
+import json
 from flask import Flask, render_template, jsonify, request
 from app.utils.auth_utils import get_token
 from flask_cors import CORS
+from app.functions.route_functions import find_route_fetch
+from app.functions.route_functions import get_route_fetch
+from dotenv import load_dotenv
+load_dotenv()
 
 # Create the Flask app with the template folder specified that will contain your index.html and static folder which will contain your JavaScript files
 app = Flask(__name__, template_folder='app/templates', static_url_path='/static')
@@ -26,6 +31,29 @@ def display_token():
     #If the request fails, return the error message
     else:
         return jsonify({'message': response})
+
+@app.route('/findRoute', methods=['POST'])
+def findRoute():
+    record = request.get_json()
+    pointA:str = record.get('pointA')
+    pointB:str = record.get('pointB')
+    pointC:str = record.get('pointC')
+    pointD:str = record.get('pointD')
+    bearerToken: str = record.get('bearerToken')
+    response, status_code = find_route_fetch(pointA, pointB, pointC, pointD, bearerToken)
+    if status_code == 200:
+        return response
+
+@app.route('/getRoute', methods=['POST'])
+def getRoute():
+    record = request.get_json()
+    route_id:str = record.get('route_id')
+    bearerToken: str = record.get('bearerToken')
+    response, status_code = get_route_fetch(route_id, bearerToken)
+    if status_code == 200:
+        return response
+    else:
+        return "request failed"
 
 if __name__ == '__main__':
     app.run(debug=False, port=5000)
