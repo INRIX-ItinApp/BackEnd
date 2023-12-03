@@ -13,9 +13,12 @@ from flask_cors import CORS
 import re
 import json
 load_dotenv()
-# OPENAI_KEY = os.getenv('OPENAI_KEY')
-client = OpenAI(api_key='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')
+OPENAI_KEY = os.getenv('OPENAI_API_KEY')
+# client = OpenAI(api_key='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')
+# client = OpenAI()
 # OpenAI.api_key = OPENAI_KEY
+client = OpenAI(api_key=OPENAI_KEY)
+
 
 
 # Create the Flask app with the template folder specified that will contain your index.html and static folder which will contain your JavaScript files
