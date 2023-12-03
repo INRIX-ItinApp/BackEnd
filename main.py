@@ -14,7 +14,7 @@ import re
 import json
 
 load_dotenv()
-OPENAI_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_KEY = os.environ.get("MY_GPT_KEY")
 client = OpenAI(api_key=OPENAI_KEY)
 
 
