@@ -1,6 +1,5 @@
 import requests
 import os
-from dotenv import load_dotenv
 
 HASH_TOKEN = os.getenv('HASH_TOKEN')
 APP_ID = os.getenv('APP_ID')
