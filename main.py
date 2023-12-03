@@ -14,9 +14,6 @@ import re
 import json
 load_dotenv()
 OPENAI_KEY = os.getenv('OPENAI_API_KEY')
-# client = OpenAI(api_key='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')
-# client = OpenAI()
-# OpenAI.api_key = OPENAI_KEY
 client = OpenAI(api_key=OPENAI_KEY)
 
 
