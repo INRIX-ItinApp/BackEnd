@@ -19,21 +19,21 @@ client = OpenAI(api_key=OPENAI_KEY)
 
 
 # Create the Flask app with the template folder specified that will contain your index.html and static folder which will contain your JavaScript files
-app = Flask(__name__, template_folder="app/templates", static_url_path="/static")
+application = Flask(__name__, template_folder="app/templates", static_url_path="/static")
 # By adding CORS(app), you are telling Flask to include CORS headers in responses. The flask_cors extension will add headers such as Access-Control-Allow-Origin: *, allowing requests from any origin.
 # This way, when your frontend makes requests to your Flask server, the server will respond with the appropriate CORS headers, and the browser will permit the requests. Since the frontend and backend are on the same origin (domain), you won't encounter CORS issues.
 # For more info on CORS goto: https://www.bannerbear.com/blog/what-is-a-cors-error-and-how-to-fix-it-3-ways/
-CORS(app)
+CORS(application)
 
 
 # This is the route that will serve your index.html template
-@app.route("/")
+@application.route("/")
 def index():
     return render_template("index.html")
 
 
 # This is the route that will help you get the token and return it as a JSON response
-@app.route("/getToken", methods=["GET"])
+@application.route("/getToken", methods=["GET"])
 def display_token():
     # This makes the call to the get_token function in the auth_utils.py file
     response, status_code = get_token()
@@ -46,7 +46,7 @@ def display_token():
         return jsonify({"message": response})
 
 
-@app.route("/findRoute", methods=["POST"])
+@application.route("/findRoute", methods=["POST"])
 def findRoute():
     record = request.get_json()
     pointA: str = record.get("pointA")
@@ -61,7 +61,7 @@ def findRoute():
         return response
 
 
-@app.route("/getRoute", methods=["POST"])
+@application.route("/getRoute", methods=["POST"])
 def getRoute():
     record = request.get_json()
     route_id: str = record.get("route_id")
@@ -74,7 +74,7 @@ def getRoute():
 
 
 # Route to interact with the OpenAI Assistant
-@app.route("/ask_openai", methods=["POST"])
+@application.route("/ask_openai", methods=["POST"])
 def ask_openai():
     print("hello!")
     user_input = request.json.get("question")
@@ -150,4 +150,4 @@ def ask_openai():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    app.run(host="0.0.0.0", port=port)
+    application.run(host="0.0.0.0", port=port)
