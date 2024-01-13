@@ -19,7 +19,9 @@ client = OpenAI(api_key=OPENAI_KEY)
 
 
 # Create the Flask app with the template folder specified that will contain your index.html and static folder which will contain your JavaScript files
-application = Flask(__name__, template_folder="app/templates", static_url_path="/static")
+application = Flask(
+    __name__, template_folder="app/templates", static_url_path="/static"
+)
 # By adding CORS(app), you are telling Flask to include CORS headers in responses. The flask_cors extension will add headers such as Access-Control-Allow-Origin: *, allowing requests from any origin.
 # This way, when your frontend makes requests to your Flask server, the server will respond with the appropriate CORS headers, and the browser will permit the requests. Since the frontend and backend are on the same origin (domain), you won't encounter CORS issues.
 # For more info on CORS goto: https://www.bannerbear.com/blog/what-is-a-cors-error-and-how-to-fix-it-3-ways/
@@ -81,46 +83,17 @@ def ask_openai():
     user_input = (
         user_input
         + """
-    I gave you a starting location and list of locations I want to go to.
+Provide an array of coordinates for each destination based on the given starting location and list of destinations. When descriptions are vague (e.g., 'grocery shopping'), select a nearby establishment and include its coordinates. The output should be a simple array of coordinate pairs, each representing a distinct destination including the starting point.
 
-    I might have given you vague descriptions of locations like "I want to go grocery shopping." in which case, just find an establishment for grocery shopping near the area that won't take too much time to drive to, and gimme its coordinates.
+Example request:
+'I'm at Stevens Court apartment in UW. My destinations are Dicks Burger, a grocery store, and a bar.'
 
-    Please gimme all possible pairs of start point and destination (coordinates) to travel from one place to the next. All possibilities of itinerary. 
+Expected output:
+An array of coordinate pairs. The first pair should represent the Stevens Court apartment in UW, followed by coordinates for Dicks Burger, a nearby grocery store, and a bar.
 
-    For example, when I say:
-    "Hey I'm at Stevens Court apartment in UW. I want to go to dicks burger, go grocery shopping, and go to a bar."
+Note: The response from the chatbot should be exclusively the array of coordinates, without any additional text or explanations.
 
-
-    Please output:
-    [
-        [(47.655548, -122.3048987), (47.6612705, -122.3133457), (47.6610986, -122.2984852), (47.6603733, -122.3130995)],
-        [(47.655548, -122.3048987), (47.6612705, -122.3133457), (47.6603733, -122.3130995), (47.6610986, -122.2984852)],
-        [(47.655548, -122.3048987), (47.6610986, -122.2984852), (47.6612705, -122.3133457), (47.6603733, -122.3130995)],
-        [(47.655548, -122.3048987), (47.6610986, -122.2984852), (47.6603733, -122.3130995), (47.6612705, -122.3133457)],
-        [(47.655548, -122.3048987), (47.6603733, -122.3130995), (47.6612705, -122.3133457), (47.6610986, -122.2984852)],
-        [(47.655548, -122.3048987), (47.6603733, -122.3130995), (47.6610986, -122.2984852), (47.6612705, -122.3133457)],
-        [(47.655548, -122.3048987), (47.6612705, -122.3133457), (47.6603733, -122.3130995), (47.6610986, -122.2984852)],
-        [(47.655548, -122.3048987), (47.6612705, -122.3133457), (47.6610986, -122.2984852), (47.6603733, -122.3130995)],
-        [(47.655548, -122.3048987), (47.6603733, -122.3130995), (47.6612705, -122.3133457), (47.6610986, -122.2984852)],
-        [(47.655548, -122.3048987), (47.6603733, -122.3130995), (47.6610986, -122.2984852), (47.6612705, -122.3133457)],
-        [(47.655548, -122.3048987), (47.6610986, -122.2984852), (47.6603733, -122.3130995), (47.6612705, -122.3133457)],
-        [(47.655548, -122.3048987), (47.6610986, -122.2984852), (47.6612705, -122.3133457), (47.6603733, -122.3130995)],
-        [(47.655548, -122.3048987), (47.6603733, -122.3130995), (47.6610986, -122.2984852), (47.6612705, -122.3133457)],
-        [(47.655548, -122.3048987), (47.6603733, -122.3130995), (47.6612705, -122.3133457), (47.6610986, -122.2984852)],
-        [(47.655548, -122.3048987), (47.6610986, -122.2984852), (47.6603733, -122.3130995), (47.6612705, -122.3133457)],
-        [(47.655548, -122.3048987), (47.6610986, -122.2984852), (47.6612705, -122.3133457), (47.6603733, -122.3130995)],
-        [(47.655548, -122.3048987), (47.6612705, -122.3133457), (47.6610986, -122.2984852), (47.6603733, -122.3130995)],
-        [(47.655548, -122.3048987), (47.6612705, -122.3133457), (47.6603733, -122.3130995), (47.6610986, -122.2984852)],
-        [(47.655548, -122.3048987), (47.6612705, -122.3133457), (47.6603733, -122.3130995), (47.6610986, -122.2984852)],
-        [(47.655548, -122.3048987), (47.6612705, -122.3133457), (47.6610986, -122.2984852), (47.6603733, -122.3130995)],
-        [(47.655548, -122.3048987), (47.6603733, -122.3130995), (47.6610986, -122.2984852), (47.6612705, -122.3133457)],
-        [(47.655548, -122.3048987), (47.6603733, -122.3130995), (47.6612705, -122.3133457), (47.6610986, -122.2984852)],
-        [(47.655548, -122.3048987), (47.6610986, -122.2984852), (47.6612705, -122.3133457), (47.6603733, -122.3130995)],
-        [(47.655548, -122.3048987), (47.6610986, -122.2984852), (47.6603733, -122.3130995), (47.6612705, -122.3133457)]
-    ]
-    In your response, like this above I just want a big array of X subarrays. X is the amount of permutations for travelling plans btw.
-    For example if there are 3 locations, there should be 6 permutations thus 6 subarrays. If 4 locations, should be 24 permutations, thus 24 subarrays.
-    """
+        """
     )
     print(user_input)
     try:
