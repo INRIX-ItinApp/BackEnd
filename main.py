@@ -12,6 +12,7 @@ from app.utils.auth_utils import get_token
 from flask_cors import CORS
 import re
 import json
+import itertools
 
 load_dotenv()
 OPENAI_KEY = os.environ.get("MY_GPT_KEY_TWO")
@@ -103,20 +104,22 @@ Note: The response from the chatbot should be exclusively the array of coordinat
         )
         # Extract the message content
         message_content = response.choices[0].message.content
+        # permutations = list(itertools.permutations(message_content))
         print("layer3")
+        print(message_content)
+        # Assuming message_content is your string
+        cleaned_content = re.sub(r"//.*", "", message_content)
+
+        # Stripping any leading/trailing whitespace
+        cleaned_content = cleaned_content.strip()
+        # print("message_content is this type:", type(message_content))
+        locations = json.loads(cleaned_content)
+        permutations = list(itertools.permutations(locations))
+        print(cleaned_content)
+        print(permutations)
+        return jsonify({"message": permutations})
         # Use regular expressions to find the JSON array within the message content
         # We're looking for the pattern that starts with '[' and ends with ']', inclusive
-        print("preprocessing", message_content)
-        json_array_str = re.search(r"\[\s*\[.*?\]\s*\]", message_content, re.DOTALL)
-        print("post-processing", json_array_str)
-        print("layer4")
-        if json_array_str:
-            print("layer5")
-            json_array_str = json_array_str.group(0)
-            print("JSON String Before Parsing:", json_array_str)
-            return json_array_str
-        else:
-            return jsonify({"error": "Could not find the array in the response"})
     except Exception as e:
         return jsonify({"error": str(e)})
 
